@@ -227,15 +227,12 @@ export default {
           formData.append("file", app.fileToMint);
           formData.append("description", app.description);
           formData.append("name", app.name);
-          formData.append("signature", {
-            signature: app.signature,
-            message: app.code,
-          });
+          formData.append("message", app.code);
+          formData.append("signature", app.signature);
           console.log("filename:", app.name);
           console.log("description:", app.description);
           console.log("Im starting to comunicating with API");
           //come append mettere nome desrizione
-
           axios({
             method: "post",
             url: process.env.VUE_APP_API_URL,
@@ -243,8 +240,8 @@ export default {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }).then(function(response) {
-            app.ipfsFile = response.data.Hash;
+          }).then(function (response) {
+            app.ipfsFile = response.data.ipfsHash;
             app.isUploadingIPFS = false;
             // file di risposta è già pronto per il minting (app.ipfsMetadata)
             app.ipfsMetadata = true;
