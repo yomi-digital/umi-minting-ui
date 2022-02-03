@@ -115,19 +115,10 @@ export default {
       contractAddress: "",
       account: "",
       isContractChecked: "",
+      contractStandard: "",
       // contract: {},
-      license: "",
       signature: "",
       code: "",
-      licenses: [
-        "CC BY",
-        "CC BY-SA",
-        "CC BY-NC",
-        "CC BY-NC-SA",
-        "CC BY-ND",
-        "CC BY-NC-ND",
-        "CC0",
-      ],
       fileToMint: {},
       isUploadingIPFS: false,
       isUploadingMetadata: false,
@@ -152,10 +143,8 @@ export default {
       // this.contract = contract;
       app.account = accounts[0];
       // fare un fetch per vedere se c'è l'indirizzo del contratto nello storage
-      let contractChecked = localStorage.getItem(
-        "contract-1155",
-        app.contractAddress
-      );
+      let contractChecked = localStorage.getItem("contract");
+      let standardContract = localStorage.getItem("standard");
       console.log("Contract address inserted", contractChecked);
       if (
         contractChecked !== null &&
@@ -164,6 +153,8 @@ export default {
       ) {
         app.isContractChecked = true;
         console.log(app.isContractChecked);
+        app.contractAddress = contractChecked;
+        app.contractStandard = standardContract;
       } else {
         app.isContractChecked = false;
       }
@@ -183,7 +174,8 @@ export default {
         console.log(checkContract1155);
         if (checkContract1155.methods.prepare !== undefined) {
           console.log("starting checking contract 1155");
-          localStorage.setItem("contract-1155", app.contractAddress);
+          localStorage.setItem("contract", app.contractAddress);
+          localStorage.setItem("standard", "1155");
           console.log("1155 is checked", checkContract1155);
           app.isContractChecked = true;
         } else {
@@ -196,7 +188,8 @@ export default {
           );
           if (checkContract721.methods.returnTokenURI !== undefined) {
             console.log("starting checking contract 721");
-            localStorage.setItem("contract-755", app.contractAddress);
+            localStorage.setItem("contract", app.contractAddress);
+            localStorage.setItem("standard", "721");
             console.log("721 is checked", checkContract1155);
             app.isContractChecked = true;
           } else {
