@@ -1,15 +1,17 @@
-import Vue from 'vue'
-import App from './App.vue'
-import './registerServiceWorker'
-import router from './router'
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+import Vue from "vue";
+import App from "./App.vue";
+import "./registerServiceWorker";
+import router from "./router";
+import Buefy from "buefy";
 
-Vue.config.productionTip = false
+import "buefy/dist/buefy.css";
+import "./themes/style.scss";
 
-Vue.use(Buefy)
+Vue.config.productionTip = false;
+
+Vue.use(Buefy);
 
 new Vue({
   router,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

@@ -1,18 +1,21 @@
 <template>
-  <div class="home container">
-    <!-- <img style="width:150px" src="../assets/logo.jpg"> -->
-    <h1 class="mb-5">UMi | Minting NFTs UI</h1>
-    <Mint />
+  <div>
+    <section class="hero">
+      <Header />
+      <Mint />
+    </section>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Mint from "@/components/Mint.vue";
+import Header from "@/components/Header.vue";
 
 export default {
   name: "Home",
   components: {
+    Header,
     Mint,
   },
 };
