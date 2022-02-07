@@ -122,7 +122,6 @@
           </div>
           <div class="console-log b-left column p-0">
             <div class="has-text-start">
-              <h2 class="mb-2 px-4 pt-5">WHAT'S HAPPENING</h2>
               <div class="mt-5 b-bottom">
                 <div class="px-4 mb-5">
                   <h2>Address connected is:</h2>
@@ -139,6 +138,7 @@
                 </div>
               </div>
               <div class="px-4 pt-5">
+                <h2 class="mb-2">WHAT'S HAPPENING:</h2>
                 <div id="printLog"></div>
               </div>
             </div>
