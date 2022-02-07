@@ -3,7 +3,7 @@
     <div class="ms-5 ps-2 is-flex is-justify-content-flex-start is-align-items-center">
       <h1 style="font-weight: bold">UMi|</h1>
       <div class="text-start me-3">
-        <p class="m-0">Minting NFT</p>
+        <p class="m-0">Minting</p>
         <p class="m-0">User Interface</p>
       </div>
     </div>

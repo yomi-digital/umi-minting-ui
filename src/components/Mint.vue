@@ -7,7 +7,7 @@
             class="column is-two-thirds is-three-fifths-tablet is-full-mobile"
           >
             <div class="pt-3 pb-4">
-              <div class="columns is-centered mt-5">
+              <div class="columns is-centered mt-2">
                 <div class="column is-two-thirds">
                   <div v-if="!isContractChecked">
                     <b-field label="Contract" custom-class="is-large">
@@ -120,7 +120,7 @@
               </div>
             </div>
           </div>
-          <div class="console-log b-left column p-0">
+          <div class="column console-log b-left p-0">
             <div class="has-text-start">
               <div class="mt-5 b-bottom">
                 <div class="px-4 mb-5">
@@ -139,7 +139,10 @@
               </div>
               <div class="px-4 pt-5">
                 <h2 class="mb-2">WHAT'S HAPPENING:</h2>
-                <div id="printLog"></div>
+                <div class="is-flex">
+                  <div id="printLog"></div>
+                  <p class="pulsing">_</p>
+                </div>
               </div>
             </div>
           </div>
@@ -147,12 +150,15 @@
       </section>
     </div>
 
-    <div class="is-flex is-justify-content-center">
+    <div
+      class="is-flex is-justify-content-center is-align-items-center is-full-mobile"
+      style="height: 80vh"
+    >
       <div class="has-text-centered mt-5" v-if="!account">
-        <h3>
+        <h1>
           Please connect your Metamask wallet first,<br />window should be open
           automatically or click below button.<br /><br />
-        </h3>
+        </h1>
         <b-button v-on:click="connect">CONNECT METAMASK</b-button>
       </div>
     </div>

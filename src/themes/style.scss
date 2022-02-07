@@ -45,11 +45,16 @@ a:hover {
   text-decoration: underline;
 }
 
+.green {
+  color: $main_color !important;
+}
+
 h1 {
   margin: 0;
   line-height: 1;
   box-sizing: border-box;
   font-size: 2rem;
+  font-weight: 900;
 }
 
 h2 {
@@ -97,12 +102,15 @@ p {
   cursor: pointer;
   transform: scale(1);
   transition: all 0.3s;
+  font-weight: 900;
 }
 
 .button:hover {
-  color: $main_color;
-  transform: scale(1.2);
+  color: black;
+
+  transform: scale(1.1);
   border: 1px solid $main_color;
+  background-color: $main_color;
 }
 
 .b-left {
@@ -120,11 +128,13 @@ textarea.textarea {
   border: none;
   border-bottom: 1px solid $main_color;
   border-radius: 0;
-  outline-width: 0;
   font-size: 1.5rem;
+  outline-width: 10px !important;
+  box-shadow: none !important;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: rgb(54, 54, 54) !important;
 }
 
@@ -134,8 +144,8 @@ label.upload.control.is-expanded {
 
 label {
   text-transform: uppercase;
-  padding-left: 5px;
-  border-left: 5px solid $main_color;
+  padding-left: 10px;
+  border-left: 2px solid $main_color;
 }
 
 p.label {
@@ -143,7 +153,29 @@ p.label {
   font-size: 1.5rem;
   font-weight: bold;
   padding-left: 10px;
-  border-left: 5px solid $main_color;
+  border-left: 2px solid $main_color;
+}
+
+.pulsing {
+  font-size: 1em;
+  font-weight: 800;
+  line-height: 1.5;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  animation: pulse 0.8s step-end infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .footer {
