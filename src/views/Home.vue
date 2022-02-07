@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="structure">
     <section class="hero">
       <Header />
       <Mint />

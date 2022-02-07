@@ -40,6 +40,11 @@ body {
   font-weight: 600;
 }
 
+a:hover {
+  color: #48f723;
+  text-decoration: underline;
+}
+
 h1 {
   margin: 0;
   line-height: 1;
@@ -104,13 +109,37 @@ p {
   border-left: 1px solid $main_color;
 }
 
+.b-bottom {
+  border-bottom: 1px solid $main_color;
+}
+
 input.input,
 textarea.textarea {
   background-color: black;
   color: $main_color;
-  border: 1px solid $main_color;
+  border: none;
+  border-bottom: 1px solid $main_color;
+  border-radius: 0;
   outline-width: 0;
-  width: 50%;
+  font-size: 1.5rem;
+}
+
+label.upload.control.is-expanded {
+  border-left: none;
+}
+
+label {
+  text-transform: uppercase;
+  padding-left: 5px;
+  border-left: 5px solid $main_color;
+}
+
+p.label {
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-left: 10px;
+  border-left: 5px solid $main_color;
 }
 
 .footer {
@@ -126,9 +155,9 @@ textarea.textarea {
 .structure {
   color: $main_color;
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   .console-log {
-    height: 85.8vh;
+    height: 92vh;
     overflow-y: auto;
   }
 }
@@ -136,7 +165,8 @@ textarea.textarea {
 // SCROLLBAR
 
 ::-webkit-scrollbar {
-  width: 10px;
+  // width: 10px;
+  width: 0;
 }
 
 /* Track */
