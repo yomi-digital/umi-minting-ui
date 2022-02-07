@@ -47,7 +47,10 @@
                         class="size-large"
                         custom-class="is-large"
                       >
-                        <b-input v-model="name"></b-input>
+                        <b-input
+                          placeholder="Type a name"
+                          v-model="name"
+                        ></b-input>
                       </b-field>
                     </div>
                     <div class="mt-5">
@@ -55,13 +58,18 @@
                         <b-input
                           maxlength="200"
                           v-model="description"
+                          placeholder="Type a description of your nft"
                           type="textarea"
                         ></b-input>
                       </b-field>
                     </div>
                     <div class="mt-5 mb-5">
                       <b-field label="Amount" custom-class="is-large">
-                        <b-input v-model="amount" type="number"></b-input>
+                        <b-input
+                          v-model="amount"
+                          placeholder="Type an amount"
+                          type="number"
+                        ></b-input>
                       </b-field>
                     </div>
 
