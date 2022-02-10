@@ -27,6 +27,29 @@
                       <p class="label" v-if="!fileToMint.name">
                         Choose a file for minting
                       </p>
+                      <div v-if="fileToMint.name" style="margin-top: 30px">
+                        <div v-if="!show" @click="show = true">
+                          <b-button>show</b-button>
+                        </div>
+                        <div
+                          style="float:left;"
+                          v-if="show"
+                          @click="show = false"
+                        >
+                          <b-button>hide</b-button>
+                        </div>
+                        Selected file: <b>{{ fileToMint.name }}</b>
+                        <div
+                          @click="fileToMint = {}"
+                          style="float: right; cursor: pointer; font-size: 18px"
+                        >
+                          X
+                        </div>
+                        <br /><br />
+                        <div v-if="preview && show">
+                          <img :src="preview" width="100%" />
+                        </div>
+                      </div>
                       <b-field
                         v-if="!fileToMint.name"
                         class="size-large"
@@ -63,7 +86,7 @@
                         ></b-input>
                       </b-field>
                     </div>
-                    <div class="mt-5 mb-5">
+                    <div v-if="standardContract === '1155'" class="mt-5 mb-5">
                       <b-field label="Amount" custom-class="is-large">
                         <b-input
                           v-model="amount"
@@ -139,9 +162,9 @@
               </div>
               <div class="px-4 pt-5">
                 <h2 class="mb-2">WHAT'S HAPPENING:</h2>
-                <div class="is-flex">
-                  <div id="printLog"></div>
+                <div class="">
                   <p class="pulsing">_</p>
+                  <div id="printLog"></div>
                 </div>
               </div>
             </div>
@@ -151,10 +174,11 @@
     </div>
 
     <div
+      v-if="!account"
       class="is-flex is-justify-content-center is-align-items-center is-full-mobile"
       style="height: 80vh"
     >
-      <div class="has-text-centered mt-5" v-if="!account">
+      <div class="has-text-centered mt-5">
         <h1>
           Please connect your Metamask wallet first,<br />window should be open
           automatically or click below button.<br /><br />
@@ -185,11 +209,13 @@ export default {
       signature: "",
       code: "",
       fileToMint: {},
+      preview: "",
       isUploadingIPFS: false,
       isUploadingMetadata: false,
       isMinting: false,
       isPrepareMinting: false,
       name: "",
+      show: false,
       ipfsFile: "",
       ipfsMetadata: "",
       description: "",
@@ -201,12 +227,21 @@ export default {
   mounted() {
     this.connect();
   },
+  watch: {
+    fileToMint() {
+      try {
+        this.preview = URL.createObjectURL(this.fileToMint);
+      } catch (e) {
+        this.preview = "";
+      }
+    },
+  },
   methods: {
     printLog(message, value = "") {
       console.log(message, value);
       document.getElementById("printLog").innerHTML =
         message +
-        " " +
+        "<br> " +
         value +
         "<div class='console-margin'>" +
         document.getElementById("printLog").innerHTML;
@@ -361,11 +396,11 @@ export default {
               let minted = await app.contract.methods
                 .mint(app.account, app.ipfsFile, app.amount)
                 .send({ from: this.account });
-              alert("Successfully minted at: " + minted.transactionHash);
+              app.printLog("Successfully minted at: " + minted.transactionHash);
               app.isMinting = false;
             }
           } catch (e) {
-            alert(e);
+            app.printLog(e.message);
           }
         } else {
           console.log("IM ON 721");
@@ -380,10 +415,10 @@ export default {
             let minted = await app.contract.methods
               .mintNFT(app.account, app.ipfsFile)
               .send({ from: this.account });
-            alert("Successfully minted at: " + minted.transactionHash);
+            app.printLog("Successfully minted at: " + minted.transactionHash);
             app.isMinting = false;
           } catch (e) {
-            alert(e);
+            app.printLog(e.message);
           }
         }
       }
@@ -396,3 +431,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#printLog {
+  word-break: break-all;
+}
+</style>
