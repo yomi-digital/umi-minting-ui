@@ -3,11 +3,11 @@
     <div
       class="ms-5 ps-2 is-flex is-justify-content-flex-start is-align-items-center"
     >
-      <h1 style="font-weight: bold">UMi|</h1>
-      <div class="text-start me-3">
-        <p class="m-0">Universal</p>
-        <p class="m-0">Minting Interface</p>
-      </div>
+      <img
+        src="../img/umi.png"
+        alt=""
+        style="height: 40px; margin-right: 15px"
+      />
     </div>
     <a v-if="!isDashboard" href="/" class="back-button">
       <i class="fas fa-chevron-left"></i>
