@@ -7,15 +7,17 @@ html,
 body {
   background-color: $bg_page;
   font-family: "Inconsolata", monospace;
+  overflow: hidden;
 }
 
 .myHeader {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
   background-color: $main_color;
   color: black;
-  position: relative;
+  z-index: 2;
   * {
     margin: 0;
     box-sizing: border-box;
@@ -100,17 +102,21 @@ p {
   color: $main_color;
   box-sizing: border-box;
   cursor: pointer;
-  transform: scale(1);
   transition: all 0.3s;
   font-weight: 900;
+  font-family: "Inconsolata";
+  width: 100%;
 }
+
 
 .button:hover {
   color: black;
-
-  transform: scale(1.1);
   border: 1px solid $main_color;
   background-color: $main_color;
+}
+
+.smaller-btn {
+  width: 100px;
 }
 
 .b-left {
@@ -180,30 +186,49 @@ p.label {
 
 .footer {
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   padding: 10px 0;
   border-top: 1px solid $main_color;
   background-color: black;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
 }
 
 .structure {
   color: $main_color;
   width: 100vw;
-  height: 90vh;
+  padding-top: 70px;
   .console-log {
-    height: 92vh;
+    min-height: calc(100vh - 69px);
     overflow-y: auto;
   }
 }
 
+.img_container {
+  width: 100%;
+  height: 500px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.left-column {
+  padding-bottom: 90px;
+  height: calc(100vh - 69px);
+  overflow: auto;
+}
+.right-column {
+  padding: 0 20px 0 0;
+}
 
 // SCROLLBAR
 
 ::-webkit-scrollbar {
   // width: 10px;
-  width: 0;
+  width: 10px;
 }
 
 /* Track */

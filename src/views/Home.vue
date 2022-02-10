@@ -1,9 +1,12 @@
 <template>
-  <div class="structure">
-    <section class="hero">
-      <Header />
-      <Mint />
-    </section>
+  <div>
+    <div class="structure">
+      <section class="hero">
+        <Header />
+        <Mint />
+      </section>
+    </div>
+    <Footer />
   </div>
 </template>
 
@@ -11,12 +14,14 @@
 // @ is an alias to /src
 import Mint from "@/components/Mint.vue";
 import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
 
 export default {
   name: "Home",
   components: {
     Header,
     Mint,
+    Footer,
   },
 };
 </script>

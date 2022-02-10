@@ -4,7 +4,7 @@
       <section>
         <div class="columns is-mobile">
           <div
-            class="column is-two-thirds is-three-fifths-tablet is-full-mobile"
+            class="column is-two-thirds is-three-fifths-tablet is-full-mobile left-column"
           >
             <div class="pt-3 pb-4">
               <div class="columns is-centered mt-2">
@@ -14,7 +14,7 @@
                       <b-input v-model="contractAddress"></b-input>
                     </b-field>
                     <b-button class="mt-2" @click="fetchContract()"
-                      >Submit</b-button
+                      >Select Contract</b-button
                     >
                   </div>
                 </div>
@@ -22,104 +22,93 @@
 
               <div v-if="isContractChecked">
                 <div class="columns is-centered">
-                  <div class="column is-8">
-                    <div class="mb-5">
-                      <p class="label" v-if="!fileToMint.name">
-                        Choose a file for minting
-                      </p>
-                      <div v-if="fileToMint.name" style="margin-top: 30px">
-                        <div v-if="!show" @click="show = true">
-                          <b-button>show</b-button>
-                        </div>
-                        <div
-                          style="float:left;"
-                          v-if="show"
-                          @click="show = false"
-                        >
-                          <b-button>hide</b-button>
-                        </div>
-                        Selected file: <b>{{ fileToMint.name }}</b>
-                        <div
-                          @click="fileToMint = {}"
-                          style="float: right; cursor: pointer; font-size: 18px"
-                        >
-                          X
-                        </div>
-                        <br /><br />
-                        <div v-if="preview && show">
-                          <img :src="preview" width="100%" />
-                        </div>
-                      </div>
-                      <b-field
-                        v-if="!fileToMint.name"
-                        class="size-large"
-                        custom-class="is-large"
-                      >
-                        <b-upload v-model="fileToMint" expanded drag-drop>
-                          <section class="section">
-                            <div class="content has-text-centered">
-                              <p>Drop your files here or click to upload</p>
+                  <div class="column is-9">
+                    <div v-if="!ipfsFile && !ipfsMetadata">
+                      <div class="mb-5">
+                        <p class="label">
+                          Choose a file for minting *
+                        </p>
+                        <div v-if="fileToMint.name">
+                          <div
+                            class=" is-flex is-justify-content-space-between is-align-items-center "
+                          >
+                            <div v-if="!show" @click="show = true">
+                              <b-button class="smaller-btn">show</b-button>
                             </div>
-                          </section>
-                        </b-upload>
-                      </b-field>
-                    </div>
-                    <div class="mt-5">
-                      <b-field
-                        label="Name"
-                        class="size-large"
-                        custom-class="is-large"
-                      >
-                        <b-input
-                          placeholder="Type a name"
-                          v-model="name"
-                        ></b-input>
-                      </b-field>
-                    </div>
-                    <div class="mt-5">
-                      <b-field label="Description" custom-class="is-large">
-                        <b-input
-                          maxlength="200"
-                          v-model="description"
-                          placeholder="Type a description of your nft"
-                          type="textarea"
-                        ></b-input>
-                      </b-field>
-                    </div>
-                    <div v-if="standardContract === '1155'" class="mt-5 mb-5">
-                      <b-field label="Amount" custom-class="is-large">
-                        <b-input
-                          v-model="amount"
-                          placeholder="Type an amount"
-                          type="number"
-                        ></b-input>
-                      </b-field>
+                            <div v-if="show" @click="show = false">
+                              <b-button class="smaller-btn">hide</b-button>
+                            </div>
+                            Selected file: <b>{{ fileToMint.name }}</b>
+                            <b-button
+                              class="smaller-btn"
+                              @click="fileToMint = {}"
+                            >
+                              X
+                            </b-button>
+                          </div>
+                          <div
+                            v-if="preview && show"
+                            class="img_container mt-4"
+                          >
+                            <img :src="preview" />
+                          </div>
+                        </div>
+
+                        <b-field
+                          v-if="!fileToMint.name"
+                          class="size-large"
+                          custom-class="is-large"
+                        >
+                          <b-upload v-model="fileToMint" expanded drag-drop>
+                            <section class="section">
+                              <div class="content has-text-centered">
+                                <p>Drop your files here or click to upload</p>
+                              </div>
+                            </section>
+                          </b-upload>
+                        </b-field>
+                      </div>
+                      <div class="mt-5">
+                        <b-field
+                          label="Name *"
+                          class="size-large"
+                          custom-class="is-large"
+                        >
+                          <b-input
+                            placeholder="Type a name"
+                            v-model="name"
+                          ></b-input>
+                        </b-field>
+                      </div>
+                      <div class="mt-5">
+                        <b-field label="Description" custom-class="is-large">
+                          <b-input
+                            maxlength="200"
+                            v-model="description"
+                            placeholder="Type a description of your nft"
+                            type="textarea"
+                          ></b-input>
+                        </b-field>
+                      </div>
+                      <div v-if="standardContract === '1155'" class="mt-5 mb-5">
+                        <b-field label="Amount *" custom-class="is-large">
+                          <b-input
+                            v-model="amount"
+                            placeholder="Type an amount"
+                            type="number"
+                          ></b-input>
+                        </b-field>
+                      </div>
                     </div>
 
-                    <b-button
-                      v-if="ipfsFile && ipfsMetadata && !isMinting"
-                      expanded
-                      v-on:click="mint"
-                      >MINT!</b-button
+                    <div
+                      v-if="ipfsFile"
+                      style="padding: 20px; text-align: center!important; font-size:22px;"
                     >
-                    <b-button
-                      v-if="!ipfsFile && !ipfsMetadata && !isUploadingIPFS"
-                      expanded
-                      v-on:click="uploadFile"
-                      >Upload file to IPFS</b-button
-                    >
-                    <b-button
-                      v-if="ipfsFile && !ipfsMetadata && !isUploadingMetadata"
-                      expanded
-                      v-on:click="createJson"
-                      >Upload metadata to IPFS</b-button
-                    ><br />
-
-                    <div v-if="fileToMint.name">
-                      Selected file: <b>{{ fileToMint.name }}</b>
-                    </div>
-                    <div v-if="ipfsFile">
-                      IPFS hash is:
+                      Your metadata are ready!<br />please check it following
+                      below link and push "MINT" button whenever you're ready to
+                      mint.
+                      <hr />
                       <b
                         ><a
                           :href="'https://ipfs.io/ipfs/' + ipfsFile"
@@ -128,14 +117,35 @@
                         ></b
                       >
                     </div>
-                    <div v-if="isPrepareMinting">
+
+                    <b-button
+                      v-if="
+                        ipfsFile &&
+                          ipfsMetadata &&
+                          !isMinting &&
+                          !isPrepareMinting
+                      "
+                      expanded
+                      v-on:click="mint"
+                      >MINT!</b-button
+                    >
+                    <b-button
+                      v-if="!ipfsFile && !ipfsMetadata && !isUploadingIPFS"
+                      expanded
+                      v-on:click="uploadFile"
+                      >Prepare metadata</b-button
+                    >
+                    <!-- 
+                    <div v-if="fileToMint.name">
+                      Selected file: <b>{{ fileToMint.name }}</b>
+                    </div> -->
+                    <div style="text-align:center" v-if="isPrepareMinting">
                       Preparing Mint, please wait...
                     </div>
-                    <div v-if="isMinting">Minting NFT, please wait...</div>
-                    <div v-if="isUploadingIPFS">
-                      Uploading file to IPFS, please wait...
+                    <div style="text-align:center" v-if="isMinting">
+                      Minting NFT, please wait...
                     </div>
-                    <div v-if="isUploadingMetadata">
+                    <div style="text-align:center" v-if="isUploadingIPFS">
                       Uploading metadata to IPFS, please wait...
                     </div>
                   </div>
@@ -144,7 +154,7 @@
             </div>
           </div>
           <div class="column console-log b-left p-0">
-            <div class="has-text-start">
+            <div class="has-text-start right-column">
               <div class="mt-5 b-bottom">
                 <div class="px-4 mb-5">
                   <h2>Address connected is:</h2>
@@ -246,7 +256,6 @@ export default {
         "<div class='console-margin'>" +
         document.getElementById("printLog").innerHTML;
     },
-
     async connect() {
       const app = this;
       window.ethereum.enable();
@@ -289,6 +298,7 @@ export default {
           localStorage.setItem("standard", "1155");
           app.printLog("You have inserted a 1155 contract");
           app.isContractChecked = true;
+          app.standardContract = "1155";
         } catch (e) {
           let checkContract721 = await new app.web3.eth.Contract(
             ABI_721,
@@ -304,6 +314,7 @@ export default {
             localStorage.setItem("standard", "721");
             console.log("721 is checked", checkContract1155);
             app.isContractChecked = true;
+            app.standardContract = "721";
           } catch (e) {
             alert("The contract address that you have inserted it's not valid");
           }
@@ -315,7 +326,13 @@ export default {
 
     async uploadFile() {
       const app = this;
-      if (app.fileToMint.name && !app.isUploadingIPFS) {
+      if (
+        app.fileToMint.name.length > 0 &&
+        app.name.length > 0 &&
+        (app.standardContract === "721" ||
+          (app.standardContract === "1155" && parseInt(app.amount) > 0)) &&
+        !app.isUploadingIPFS
+      ) {
         //chiedere firma di un messaggio al metamask ("Create metadata for  app.fileToMint.name at new Date().getTime()")
         //per mandare il messaggio fare una chiamata:
         app.code =
@@ -365,7 +382,7 @@ export default {
           alert("Sign message first!");
         }
       } else {
-        alert("Select a file first!");
+        alert("Fill all required fields!");
       }
     },
 
@@ -373,8 +390,8 @@ export default {
       const app = this;
       console.log(app.standardContract);
       if (!app.isMinting) {
-        app.isPrepareMinting = true;
         if (app.standardContract === "1155") {
+          app.isPrepareMinting = true;
           try {
             app.contract = await new app.web3.eth.Contract(
               ABI_1155,
@@ -387,7 +404,12 @@ export default {
             if (app.ipfsFile.length > 0) {
               let prepared = await app.contract.methods
                 .prepare(app.account, app.ipfsFile, app.amount)
-                .send({ from: this.account });
+                .send({ from: this.account })
+                .on("transactionHash", (tx) => {
+                  app.printLog(
+                    "Waiting for transaction to be confirmed at: " + tx
+                  );
+                });
               app.printLog(
                 "Successfully prepared at: " + prepared.transactionHash
               );
@@ -395,14 +417,26 @@ export default {
               app.isMinting = true;
               let minted = await app.contract.methods
                 .mint(app.account, app.ipfsFile, app.amount)
-                .send({ from: this.account });
+                .send({ from: this.account })
+                .on("transactionHash", (tx) => {
+                  app.printLog(
+                    "Waiting for transaction to be confirmed at: " + tx
+                  );
+                });
               app.printLog("Successfully minted at: " + minted.transactionHash);
               app.isMinting = false;
+              app.name = "";
+              app.description = "";
+              app.amount = 0;
+              app.ipfsFile = "";
+              app.ipfsMetadata = "";
+              app.fileToMint = {};
             }
           } catch (e) {
             app.printLog(e.message);
           }
         } else {
+          app.isMinting = true;
           console.log("IM ON 721");
           try {
             app.contract = await new app.web3.eth.Contract(
@@ -414,9 +448,20 @@ export default {
             );
             let minted = await app.contract.methods
               .mintNFT(app.account, app.ipfsFile)
-              .send({ from: this.account });
+              .send({ from: this.account })
+              .on("transactionHash", (tx) => {
+                app.printLog(
+                  "Waiting for transaction to be confirmed at: " + tx
+                );
+              });
             app.printLog("Successfully minted at: " + minted.transactionHash);
             app.isMinting = false;
+            app.name = "";
+            app.description = "";
+            app.amount = 0;
+            app.ipfsFile = "";
+            app.ipfsMetadata = "";
+            app.fileToMint = {};
           } catch (e) {
             app.printLog(e.message);
           }
