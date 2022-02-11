@@ -263,6 +263,9 @@ export default {
       // this.contract = contract;
       app.account = accounts[0];
       // fare un fetch per vedere se c'è l'indirizzo del contratto nello storage
+      if(app.$route.params.contract !== undefined && app.$route.params.contract.indexOf('0x') === 0){
+        localStorage.setItem("contract", app.$route.params.contract)
+      }
       let contractChecked = localStorage.getItem("contract");
       let standardContract = localStorage.getItem("standard");
       if (
@@ -471,7 +474,7 @@ export default {
 
     changeContract() {
       localStorage.clear();
-      window.location.reload();
+      location.href = '/'
     },
   },
 };
