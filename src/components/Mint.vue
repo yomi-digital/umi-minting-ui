@@ -4,7 +4,11 @@
       <section>
         <div class="columns is-mobile">
           <div
-            class="column is-two-thirds is-three-fifths-tablet is-full-mobile left-column"
+            class="
+              column
+              is-two-thirds is-three-fifths-tablet is-full-mobile
+              left-column
+            "
           >
             <div class="pt-3 pb-4">
               <div class="columns is-centered mt-2">
@@ -25,12 +29,14 @@
                   <div class="column is-9">
                     <div v-if="!ipfsFile && !ipfsMetadata">
                       <div class="mb-5">
-                        <p class="label">
-                          Choose a file for minting *
-                        </p>
+                        <p class="label">Choose a file for minting *</p>
                         <div v-if="fileToMint.name">
                           <div
-                            class=" is-flex is-justify-content-space-between is-align-items-center "
+                            class="
+                              is-flex
+                              is-justify-content-space-between
+                              is-align-items-center
+                            "
                           >
                             <div v-if="!show" @click="show = true">
                               <b-button class="smaller-btn">show</b-button>
@@ -103,7 +109,11 @@
 
                     <div
                       v-if="ipfsFile"
-                      style="padding: 20px; text-align: center!important; font-size:22px;"
+                      style="
+                        padding: 20px;
+                        text-align: center !important;
+                        font-size: 22px;
+                      "
                     >
                       Your metadata are ready!<br />please check it following
                       below link and push "MINT" button whenever you're ready to
@@ -121,9 +131,9 @@
                     <b-button
                       v-if="
                         ipfsFile &&
-                          ipfsMetadata &&
-                          !isMinting &&
-                          !isPrepareMinting
+                        ipfsMetadata.length > 0 &&
+                        !isMinting &&
+                        !isPrepareMinting
                       "
                       expanded
                       v-on:click="mint"
@@ -139,13 +149,13 @@
                     <div v-if="fileToMint.name">
                       Selected file: <b>{{ fileToMint.name }}</b>
                     </div> -->
-                    <div style="text-align:center" v-if="isPrepareMinting">
+                    <div style="text-align: center" v-if="isPrepareMinting">
                       Preparing Mint, please wait...
                     </div>
-                    <div style="text-align:center" v-if="isMinting">
+                    <div style="text-align: center" v-if="isMinting">
                       Minting NFT, please wait...
                     </div>
-                    <div style="text-align:center" v-if="isUploadingIPFS">
+                    <div style="text-align: center" v-if="isUploadingIPFS">
                       Uploading metadata to IPFS, please wait...
                     </div>
                   </div>
@@ -182,10 +192,11 @@
         </div>
       </section>
     </div>
-
     <div
       v-if="!account"
-      class="is-flex is-justify-content-center is-align-items-center is-full-mobile"
+      class="
+        is-flex is-justify-content-center is-align-items-center is-full-mobile
+      "
       style="height: 80vh"
     >
       <div class="has-text-centered mt-5">
@@ -263,8 +274,11 @@ export default {
       // this.contract = contract;
       app.account = accounts[0];
       // fare un fetch per vedere se c'è l'indirizzo del contratto nello storage
-      if(app.$route.params.contract !== undefined && app.$route.params.contract.indexOf('0x') === 0){
-        localStorage.setItem("contract", app.$route.params.contract)
+      if (
+        app.$route.params.contract !== undefined &&
+        app.$route.params.contract.indexOf("0x") === 0
+      ) {
+        localStorage.setItem("contract", app.$route.params.contract);
       }
       let contractChecked = localStorage.getItem("contract");
       let standardContract = localStorage.getItem("standard");
@@ -282,7 +296,6 @@ export default {
         app.isContractChecked = false;
       }
     },
-
     async fetchContract() {
       const app = this;
       app.printLog("fetching contract...");
@@ -326,7 +339,6 @@ export default {
         alert("error");
       }
     },
-
     async uploadFile() {
       const app = this;
       if (
@@ -350,34 +362,49 @@ export default {
           );
           console.log("signature is:", app.signature);
         } catch (e) {
+          app.isUploadingIPFS = false;
           alert(e.message);
         }
         if (app.account !== undefined && app.signature.length > 0) {
           app.isUploadingIPFS = true;
           const formData = new FormData();
           formData.append("file", app.fileToMint);
-          formData.append("description", app.description);
           formData.append("name", app.name);
+          // TODO: this should be implemented in backend too
           formData.append("message", app.code);
           formData.append("signature", app.signature);
-          app.printLog("filename:", app.name);
-          app.printLog("description:", app.description);
-          app.printLog("Sending request...");
+          app.printLog("Uploading media to IPFS...");
           //come append mettere nome desrizione
           try {
-            let response = await axios({
+            const mediaUpload = await axios({
               method: "post",
-              url: process.env.VUE_APP_API_URL,
+              url: process.env.VUE_APP_UMI_URL + "/ipfs/upload",
               data: formData,
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             });
-            app.ipfsFile = response.data.ipfsHash;
+            app.ipfsFile = mediaUpload.data.ipfs_hash;
+            app.printLog("Media uploaded correctly at: " + app.ipfsFile);
+            // Uploading whole metadata to IPFS
+            const metadataUpload = await axios({
+              method: "post",
+              url: process.env.VUE_APP_UMI_URL + "/ipfs/nft",
+              data: {
+                nft: {
+                  name: app.name,
+                  description: app.description,
+                  image: app.ipfsFile,
+                },
+                provider: "pinata",
+              },
+            });
+            console.log(metadataUpload.data);
+            app.ipfsMetadata = metadataUpload.data.ipfs_hash;
             app.isUploadingIPFS = false;
-            // file di risposta è già pronto per il minting (app.ipfsMetadata)
-            app.ipfsMetadata = true;
+            app.printLog("Metadata uploaded correctly at: " + app.ipfsMetadata);
           } catch (e) {
+            app.isUploadingIPFS = false;
             alert("Can't create metadata");
           }
           app.printLog("All data was submitted");
@@ -388,7 +415,6 @@ export default {
         alert("Fill all required fields!");
       }
     },
-
     async mint() {
       const app = this;
       console.log(app.standardContract);
@@ -403,7 +429,6 @@ export default {
                 gasLimit: "5000000",
               }
             );
-            console.log(app.ipfsMetadata);
             if (app.ipfsFile.length > 0) {
               let prepared = await app.contract.methods
                 .prepare(app.account, app.ipfsFile, app.amount)
@@ -471,10 +496,9 @@ export default {
         }
       }
     },
-
     changeContract() {
       localStorage.clear();
-      location.href = '/'
+      location.href = "/";
     },
   },
 };
