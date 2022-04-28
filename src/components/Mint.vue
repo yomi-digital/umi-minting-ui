@@ -121,9 +121,9 @@
                       <hr />
                       <b
                         ><a
-                          :href="'https://ipfs.io/ipfs/' + ipfsFile"
+                          :href="'https://ipfs.yomi.digital/ipfs/' + ipfsMetadata"
                           target="_blank"
-                          >{{ ipfsFile }}</a
+                          >{{ ipfsMetadata }}</a
                         ></b
                       >
                     </div>
@@ -394,7 +394,7 @@ export default {
                 nft: {
                   name: app.name,
                   description: app.description,
-                  image: app.ipfsFile,
+                  image: "ipfs://" + app.ipfsFile,
                 },
                 provider: "pinata",
               },
@@ -475,7 +475,7 @@ export default {
               }
             );
             let minted = await app.contract.methods
-              .mintNFT(app.account, app.ipfsFile)
+              .mintNFT(app.account, app.ipfsMetadata)
               .send({ from: this.account })
               .on("transactionHash", (tx) => {
                 app.printLog(
