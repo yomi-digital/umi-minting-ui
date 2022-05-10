@@ -1,11 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;600;800;900&display=swap");
 
-$main_color: #48f723;
-$bg_page: black;
+$main_color: white;
+$bg_page: linear-gradient(270deg, #ff7a35 0%, #eb99ff 100%);
+$input_background: #3f19567d;
+$color_contrast: #39c7ce;
 
 html,
 body {
-  background-color: $bg_page;
+  background: $bg_page;
   font-family: "Inconsolata", monospace;
   overflow: hidden;
 }
@@ -15,7 +17,8 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: $main_color;
+  background-color: $bg_page;
+  border-bottom: 1px solid white;
   color: black;
   z-index: 2;
   * {
@@ -98,7 +101,7 @@ p {
 .button {
   padding: 0.3rem 0.5rem;
   border: 1px solid $main_color;
-  background-color: black;
+  background-color: $color_contrast;
   color: $main_color;
   box-sizing: border-box;
   cursor: pointer;
@@ -107,7 +110,6 @@ p {
   font-family: "Inconsolata";
   width: 100%;
 }
-
 
 .button:hover {
   color: black;
@@ -129,7 +131,7 @@ p {
 
 input.input,
 textarea.textarea {
-  background-color: black;
+  background-color: $input_background;
   color: $main_color;
   border: none;
   border-bottom: 1px solid $main_color;
@@ -198,7 +200,7 @@ p.label {
 .structure {
   color: $main_color;
   width: 100vw;
-  padding-top: 70px;
+  padding-top: 77px;
   .console-log {
     min-height: calc(100vh - 69px);
     overflow-y: auto;
