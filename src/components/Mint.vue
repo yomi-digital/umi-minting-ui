@@ -121,7 +121,9 @@
                       <hr />
                       <b
                         ><a
-                          :href="'https://ipfs.yomi.digital/ipfs/' + ipfsMetadata"
+                          :href="
+                            'https://ipfs.yomi.digital/ipfs/' + ipfsMetadata
+                          "
                           target="_blank"
                           >{{ ipfsMetadata }}</a
                         ></b
@@ -131,9 +133,9 @@
                     <b-button
                       v-if="
                         ipfsFile &&
-                        ipfsMetadata.length > 0 &&
-                        !isMinting &&
-                        !isPrepareMinting
+                          ipfsMetadata.length > 0 &&
+                          !isMinting &&
+                          !isPrepareMinting
                       "
                       expanded
                       v-on:click="mint"
@@ -222,7 +224,7 @@ export default {
   data() {
     return {
       web3: new Web3(window.ethereum),
-      contractAddress: "",
+      contractAddress: process.env.VUE_APP_CONTRACT,
       account: "",
       isContractChecked: "",
       standardContract: "",
