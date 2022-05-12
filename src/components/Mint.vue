@@ -13,14 +13,14 @@
             <div class="pt-3 pb-4">
               <div class="columns is-centered mt-2">
                 <div class="column is-two-thirds">
-                  <div v-if="!isContractChecked">
+                  <!-- <div v-if="!isContractChecked">
                     <b-field label="Contract" custom-class="is-large">
                       <b-input v-model="contractAddress"></b-input>
                     </b-field>
                     <b-button class="mt-2" @click="fetchContract()"
                       >Select Contract</b-button
                     >
-                  </div>
+                  </div> -->
                 </div>
               </div>
 
@@ -176,9 +176,9 @@
                     <p>
                       <b>{{ contractAddress }}</b>
                     </p>
-                    <b-button class="mt-4" @click="changeContract()"
+                    <!-- <b-button class="mt-4" @click="changeContract()"
                       >Change Contract</b-button
-                    >
+                    > -->
                   </div>
                 </div>
               </div>
@@ -213,17 +213,19 @@
 </template>
 
 <script>
-var Web3 = require("web3");
 const ABI_721 = require("../util/abi721.json");
 const ABI_1155 = require("../util/abi1155.json");
 const axios = require("axios");
 const FormData = require("form-data");
+import Web3 from "web3";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export default {
   name: "Mint",
   data() {
     return {
-      web3: new Web3(window.ethereum),
+      web3: "",
       contractAddress: process.env.VUE_APP_CONTRACT,
       account: "",
       isContractChecked: "",
@@ -244,6 +246,7 @@ export default {
       description: "",
       axios: axios,
       amount: "",
+      infuraId: "57d9ea9ca92a4449933c2b7d7145187d",
       infuraURL: "https://ipfs.infura.io:5001/api/v0/add",
     };
   },
@@ -271,31 +274,36 @@ export default {
     },
     async connect() {
       const app = this;
-      window.ethereum.enable();
-      let accounts = await app.web3.eth.getAccounts();
-      // this.contract = contract;
-      app.account = accounts[0];
-      // fare un fetch per vedere se c'è l'indirizzo del contratto nello storage
-      if (
-        app.$route.params.contract !== undefined &&
-        app.$route.params.contract.indexOf("0x") === 0
-      ) {
-        localStorage.setItem("contract", app.$route.params.contract);
+      let providerOptions = {};
+      if (app.infuraId !== undefined) {
+        providerOptions = {
+          walletconnect: {
+            package: WalletConnectProvider,
+            options: {
+              infuraId: app.infuraId,
+            },
+          },
+        };
       }
-      let contractChecked = localStorage.getItem("contract");
-      let standardContract = localStorage.getItem("standard");
-      if (
-        contractChecked !== null &&
-        contractChecked !== undefined &&
-        contractChecked.length > 0
-      ) {
-        app.isContractChecked = true;
-        // console.log(app.isContractChecked);
-        app.contractAddress = contractChecked;
-        app.standardContract = standardContract;
-        app.printLog("Contract address inserted:", standardContract);
+      // Instantiating Web3Modal
+      const web3Modal = new Web3Modal({
+        cacheProvider: true,
+        providerOptions: providerOptions,
+      });
+      const provider = await web3Modal.connect();
+      app.web3 = await new Web3(provider);
+
+      // Checking if networkId matches
+      const netId = await app.web3.eth.net.getId();
+      if (parseInt(netId) !== 137) {
+        alert("Switch to Polygon network!");
       } else {
-        app.isContractChecked = false;
+        const accounts = await app.web3.eth.getAccounts();
+        if (accounts.length > 0) {
+          app.standardContract = "721";
+          app.fetchContract();
+          app.account = accounts[0];
+        }
       }
     },
     async fetchContract() {

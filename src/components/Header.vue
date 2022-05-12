@@ -4,7 +4,7 @@
       class="ms-5 ps-2 is-flex is-justify-content-flex-start is-align-items-center"
     >
       <img
-        src="../img/umi.png"
+        src="../img/logo.png"
         alt=""
         style="height: 40px; margin-right: 15px"
       />
